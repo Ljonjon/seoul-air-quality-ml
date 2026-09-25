@@ -1,0 +1,9 @@
+# Normalise line endings so the repo behaves the same on Windows and Linux CI
+* text=auto
+*.py   text eol=lf
+*.md   text eol=lf
+*.yml  text eol=lf
+*.txt  text eol=lf
+*.csv  text eol=lf
+*.json text eol=lf
+*.png  binary
