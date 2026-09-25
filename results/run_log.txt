@@ -1,0 +1,230 @@
+D:\Anaconda3\Anaconda\Lib\site-packages\seaborn\_oldcore.py:1765: FutureWarning: unique with argument that is not not a Series, Index, ExtensionArray, or np.ndarray is deprecated and will raise in a future version.
+  order = pd.unique(vector)
+D:\Anaconda3\Anaconda\Lib\site-packages\seaborn\_oldcore.py:1765: FutureWarning: unique with argument that is not not a Series, Index, ExtensionArray, or np.ndarray is deprecated and will raise in a future version.
+  order = pd.unique(vector)
+[OK] All datasets loaded successfully.
+Raw summary rows: 647511 | raw info rows: 3885066
+Dropped 42460 rows (6.56%) with any instrument status != 0 (calibration needed / abnormal / power cut / repair)
+Negative sentinel values (-1) per pollutant: {'SO2': 0, 'NO2': 0, 'O3': 0, 'CO': 0, 'PM10': 0, 'PM2.5': 0}
+Dropped 0 rows with missing pollutant values; summary rows now: 605051
+Extracting temporal features (Hour, DayOfWeek, Month)...
+One-Hot encoding districts...
+Creating 1-hour lag features (PM2.5, PM10)...
+Creating leakage-free 6-hour rolling mean of PM2.5 (previous hours only)...
+Dropped 150 warm-up rows (first hours per station); feature rows now: 604901
+Creating classification target PM2.5_grade...
+Final feature matrix: 604901 rows x 38 columns
+[protocol=chronological] train rows=483906 (before 2019-05-19 11:00:00), test rows=120995
+[protocol=random-stratified] train rows=483920, test rows=120981 (comparative protocol only)
+[protocol=chronological] train class % {0: 35.14, 1: 43.81, 2: 18.12, 3: 2.92} | test class % {0: 47.0, 1: 43.07, 2: 9.32, 3: 0.6}
+[protocol=random-stratified] train class % {0: 37.51, 1: 43.66, 2: 16.36, 3: 2.46} | test class % {0: 37.51, 1: 43.66, 2: 16.36, 3: 2.46}
+
+=======================================================
+     Starting Descriptive Analysis (Clustering)
+=======================================================
+Features selected for clustering: ['SO2', 'NO2', 'O3', 'CO', 'PM10']
+  K=2: SSE=67202.6
+  K=3: SSE=56640.6
+  K=4: SSE=48515.6
+  K=5: SSE=43967.6
+  K=6: SSE=40403.7
+  K=7: SSE=37634.1
+[FIG] saved figures\elbow_method.png
+K-Means (K=3) fitted on 483,906 training rows.
+
+Cluster profiles (means over the training split):
+           SO2    NO2     O3     CO   PM10   hours
+Cluster                                           
+0        0.466 -0.438  1.333 -0.240  0.559   95060
+1        0.540  1.222 -0.810  1.121  0.666  134178
+2       -0.458 -0.480 -0.071 -0.501 -0.559  254668
+PCA explained variance: PC1=50.0%, PC2=23.3%, total=73.3%
+[FIG] saved figures\pca_clusters.png
+
+[SUCCESS] Clustering Analysis Completed.
+
+Starting Predictive Analysis (Classification)...
+
+#######################################################
+# PROTOCOL: chronological
+#######################################################
+
+=======================================================
+     Task: Decision Tree
+=======================================================
+Accuracy: 0.8840   Macro-F1: 0.8706
+
+Confusion Matrix (rows=true, cols=pred):
+[[51778  5086     2     3]
+ [ 5851 45185  1082     0]
+ [    4  1808  9404    63]
+ [    0     0   139   590]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+        Good       0.90      0.91      0.90     56869
+      Normal       0.87      0.87      0.87     52118
+         Bad       0.88      0.83      0.86     11279
+     VeryBad       0.90      0.81      0.85       729
+
+    accuracy                           0.88    120995
+   macro avg       0.89      0.86      0.87    120995
+weighted avg       0.88      0.88      0.88    120995
+
+VeryBad rows: 729 | dangerous false negatives: 139 (19.1% of VeryBad missed)
+[FIG] saved figures\cm_chrono_decision.png
+
+=======================================================
+     Task: Random Forest
+=======================================================
+Accuracy: 0.8968   Macro-F1: 0.8739
+
+Confusion Matrix (rows=true, cols=pred):
+[[52865  4004     0     0]
+ [ 5393 46017   708     0]
+ [    3  2175  9069    32]
+ [    0     0   177   552]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+        Good       0.91      0.93      0.92     56869
+      Normal       0.88      0.88      0.88     52118
+         Bad       0.91      0.80      0.85     11279
+     VeryBad       0.95      0.76      0.84       729
+
+    accuracy                           0.90    120995
+   macro avg       0.91      0.84      0.87    120995
+weighted avg       0.90      0.90      0.90    120995
+
+VeryBad rows: 729 | dangerous false negatives: 177 (24.3% of VeryBad missed)
+[FIG] saved figures\cm_chrono_random.png
+
+=======================================================
+     Task: HistGradientBoosting
+=======================================================
+Accuracy: 0.9044   Macro-F1: 0.8919
+
+Confusion Matrix (rows=true, cols=pred):
+[[52922  3812   135     0]
+ [ 5060 46251   807     0]
+ [    1  1580  9647    51]
+ [    0     0   120   609]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+        Good       0.91      0.93      0.92     56869
+      Normal       0.90      0.89      0.89     52118
+         Bad       0.90      0.86      0.88     11279
+     VeryBad       0.92      0.84      0.88       729
+
+    accuracy                           0.90    120995
+   macro avg       0.91      0.88      0.89    120995
+weighted avg       0.90      0.90      0.90    120995
+
+VeryBad rows: 729 | dangerous false negatives: 120 (16.5% of VeryBad missed)
+[FIG] saved figures\cm_chrono_histgradientboosting.png
+[FIG] saved figures\acc_chrono.png
+
+#######################################################
+# PROTOCOL: random-stratified
+#######################################################
+
+=======================================================
+     Task: Decision Tree
+=======================================================
+Accuracy: 0.8681   Macro-F1: 0.8651
+
+Confusion Matrix (rows=true, cols=pred):
+[[39761  5608    15     0]
+ [ 4682 45935  2207     0]
+ [   12  2626 16810   349]
+ [    0     1   462  2513]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+        Good       0.89      0.88      0.89     45384
+      Normal       0.85      0.87      0.86     52824
+         Bad       0.86      0.85      0.86     19797
+     VeryBad       0.88      0.84      0.86      2976
+
+    accuracy                           0.87    120981
+   macro avg       0.87      0.86      0.87    120981
+weighted avg       0.87      0.87      0.87    120981
+
+VeryBad rows: 2976 | dangerous false negatives: 463 (15.6% of VeryBad missed)
+[FIG] saved figures\cm_random_decision.png
+
+=======================================================
+     Task: Random Forest
+=======================================================
+Accuracy: 0.8805   Macro-F1: 0.8750
+
+Confusion Matrix (rows=true, cols=pred):
+[[40446  4932     6     0]
+ [ 4090 46810  1924     0]
+ [    3  2742 16800   252]
+ [    0     0   505  2471]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+        Good       0.91      0.89      0.90     45384
+      Normal       0.86      0.89      0.87     52824
+         Bad       0.87      0.85      0.86     19797
+     VeryBad       0.91      0.83      0.87      2976
+
+    accuracy                           0.88    120981
+   macro avg       0.89      0.86      0.88    120981
+weighted avg       0.88      0.88      0.88    120981
+
+VeryBad rows: 2976 | dangerous false negatives: 505 (17.0% of VeryBad missed)
+[FIG] saved figures\cm_random_random.png
+
+=======================================================
+     Task: HistGradientBoosting
+=======================================================
+Accuracy: 0.8871   Macro-F1: 0.8863
+
+Confusion Matrix (rows=true, cols=pred):
+[[40725  4648    11     0]
+ [ 4070 46757  1997     0]
+ [    7  2268 17222   300]
+ [    0     0   352  2624]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+        Good       0.91      0.90      0.90     45384
+      Normal       0.87      0.89      0.88     52824
+         Bad       0.88      0.87      0.87     19797
+     VeryBad       0.90      0.88      0.89      2976
+
+    accuracy                           0.89    120981
+   macro avg       0.89      0.88      0.89    120981
+weighted avg       0.89      0.89      0.89    120981
+
+VeryBad rows: 2976 | dangerous false negatives: 352 (11.8% of VeryBad missed)
+[FIG] saved figures\cm_random_histgradientboosting.png
+[FIG] saved figures\acc_random.png
+
+[RESULT] wrote results\classification_results.json
+
+=======================================================
+     SUMMARY
+=======================================================
+
+[chronological]
+  HistGradientBoosting   acc=0.9044 macroF1=0.8919 VeryBad recall=0.835 (missed 120/729)
+  Random Forest          acc=0.8968 macroF1=0.8739 VeryBad recall=0.757 (missed 177/729)
+  Decision Tree          acc=0.8840 macroF1=0.8706 VeryBad recall=0.809 (missed 139/729)
+
+[random-stratified]
+  HistGradientBoosting   acc=0.8871 macroF1=0.8863 VeryBad recall=0.882 (missed 352/2976)
+  Random Forest          acc=0.8805 macroF1=0.8750 VeryBad recall=0.830 (missed 505/2976)
+  Decision Tree          acc=0.8681 macroF1=0.8651 VeryBad recall=0.844 (missed 463/2976)
+
+Pipeline finished in 52.7s

@@ -1,0 +1,210 @@
+{
+  "chronological": [
+    {
+      "model": "Decision Tree",
+      "accuracy": 0.884,
+      "macro_f1": 0.8706,
+      "recall_verybad": 0.8093,
+      "missed_verybad": 139,
+      "true_verybad": 729,
+      "confusion_matrix": [
+        [
+          51778,
+          5086,
+          2,
+          3
+        ],
+        [
+          5851,
+          45185,
+          1082,
+          0
+        ],
+        [
+          4,
+          1808,
+          9404,
+          63
+        ],
+        [
+          0,
+          0,
+          139,
+          590
+        ]
+      ]
+    },
+    {
+      "model": "Random Forest",
+      "accuracy": 0.8968,
+      "macro_f1": 0.8739,
+      "recall_verybad": 0.7572,
+      "missed_verybad": 177,
+      "true_verybad": 729,
+      "confusion_matrix": [
+        [
+          52865,
+          4004,
+          0,
+          0
+        ],
+        [
+          5393,
+          46017,
+          708,
+          0
+        ],
+        [
+          3,
+          2175,
+          9069,
+          32
+        ],
+        [
+          0,
+          0,
+          177,
+          552
+        ]
+      ]
+    },
+    {
+      "model": "HistGradientBoosting",
+      "accuracy": 0.9044,
+      "macro_f1": 0.8919,
+      "recall_verybad": 0.8354,
+      "missed_verybad": 120,
+      "true_verybad": 729,
+      "confusion_matrix": [
+        [
+          52922,
+          3812,
+          135,
+          0
+        ],
+        [
+          5060,
+          46251,
+          807,
+          0
+        ],
+        [
+          1,
+          1580,
+          9647,
+          51
+        ],
+        [
+          0,
+          0,
+          120,
+          609
+        ]
+      ]
+    }
+  ],
+  "random-stratified": [
+    {
+      "model": "Decision Tree",
+      "accuracy": 0.8681,
+      "macro_f1": 0.8651,
+      "recall_verybad": 0.8444,
+      "missed_verybad": 463,
+      "true_verybad": 2976,
+      "confusion_matrix": [
+        [
+          39761,
+          5608,
+          15,
+          0
+        ],
+        [
+          4682,
+          45935,
+          2207,
+          0
+        ],
+        [
+          12,
+          2626,
+          16810,
+          349
+        ],
+        [
+          0,
+          1,
+          462,
+          2513
+        ]
+      ]
+    },
+    {
+      "model": "Random Forest",
+      "accuracy": 0.8805,
+      "macro_f1": 0.875,
+      "recall_verybad": 0.8303,
+      "missed_verybad": 505,
+      "true_verybad": 2976,
+      "confusion_matrix": [
+        [
+          40446,
+          4932,
+          6,
+          0
+        ],
+        [
+          4090,
+          46810,
+          1924,
+          0
+        ],
+        [
+          3,
+          2742,
+          16800,
+          252
+        ],
+        [
+          0,
+          0,
+          505,
+          2471
+        ]
+      ]
+    },
+    {
+      "model": "HistGradientBoosting",
+      "accuracy": 0.8871,
+      "macro_f1": 0.8863,
+      "recall_verybad": 0.8817,
+      "missed_verybad": 352,
+      "true_verybad": 2976,
+      "confusion_matrix": [
+        [
+          40725,
+          4648,
+          11,
+          0
+        ],
+        [
+          4070,
+          46757,
+          1997,
+          0
+        ],
+        [
+          7,
+          2268,
+          17222,
+          300
+        ],
+        [
+          0,
+          0,
+          352,
+          2624
+        ]
+      ]
+    }
+  ]
+}
