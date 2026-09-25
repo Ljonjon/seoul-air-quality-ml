@@ -224,12 +224,28 @@ def test_chronological_split_never_trains_on_the_future(data):
 
 
 def test_scaler_is_fitted_on_train_only(data):
-    """[FIX-5] standardisation statistics come from the training rows."""
+    """[FIX-5] standardisation statistics come from the training rows.
+
+    Two properties are checked, and they are different in nature:
+
+    1. the training block is (numerically) centred and scaled, and
+    2. the held-out block is NOT centred -- if the scaler had seen the
+       future, the test means would collapse to zero as well.
+
+    Tolerance for (1) is a *numerical* bound, not a statistical one: the
+    model matrix is stored in float32 (make_splits -> astype('float32')),
+    so Latitude/Longitude -- raw values ~37.5/127.0 with std ~0.02/0.04 --
+    lose ~1e-4 standard-deviation units to cancellation when (x - mean)/std
+    is evaluated in float32.  All other columns are centred to <1e-7.
+    """
     feats = build_features(load_and_clean(data, log=SILENT), log=SILENT)
     pack = make_splits(feats, log=SILENT)['chronological']
     train = pack['X_train'][NUM_COLS].to_numpy(dtype='float64')
-    assert np.abs(train.mean(axis=0)).max() < 1e-5
+    test = pack['X_test'][NUM_COLS].to_numpy(dtype='float64')
+    assert np.abs(train.mean(axis=0)).max() < 1e-3
     assert np.abs(train.std(axis=0, ddof=0) - 1.0).max() < 1e-3
+    # (2) the real invariant: test rows keep their own, drifted statistics
+    assert np.abs(test.mean(axis=0)).max() > 0.05, 'test block looks centred'
 
 
 def test_all_three_classifiers_run_end_to_end(data):
