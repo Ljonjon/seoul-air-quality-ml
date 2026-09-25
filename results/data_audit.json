@@ -1,0 +1,281 @@
+{
+  "summary_rows": 647511,
+  "stations": 25,
+  "timeline_start": "2017-01-01 00:00:00",
+  "timeline_end": "2019-12-31 23:00:00",
+  "expected_grid_rows": 657000,
+  "missing_grid_cells": 9489,
+  "missing_grid_cells_pct": 1.444,
+  "expected_hours": 26280,
+  "distinct_hours_present": 25906,
+  "hours_absent_for_every_station": 374,
+  "station_hours_lost_in_partially_missing_hours": 139,
+  "hours_with_all_stations": 25876,
+  "hours_with_gaps": 30,
+  "duplicate_date_station_rows": 0,
+  "info_rows": 3885066,
+  "info_rows_per_summary_row": 6.0,
+  "info_item_codes": [
+    1,
+    3,
+    5,
+    6,
+    8,
+    9
+  ],
+  "instrument_status_counts": {
+    "0": 3775778,
+    "1": 29717,
+    "2": 3988,
+    "4": 22752,
+    "8": 32341,
+    "9": 20490
+  },
+  "hour_station_cells_flagged": 42460,
+  "hour_station_cells_flagged_pct": 6.56,
+  "pm25_gt_pm10_rows_raw": 13439,
+  "pm25_gt_pm10_rows_after_filter": 4423,
+  "pm25_raw": {
+    "mean": 25.412,
+    "median": 19.0,
+    "std": 43.925,
+    "max": 6256.0
+  },
+  "top10_pm25_rows_all_flagged": true,
+  "top10_pm25_rows": [
+    {
+      "date": "2018-04-02 16:00:00",
+      "station": 103,
+      "pm25": 6256.0,
+      "pm10": 68.0,
+      "instrument_status": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        9
+      ]
+    },
+    {
+      "date": "2019-08-02 13:00:00",
+      "station": 111,
+      "pm25": 995.0,
+      "pm10": 33.0,
+      "instrument_status": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ]
+    },
+    {
+      "date": "2019-08-05 13:00:00",
+      "station": 111,
+      "pm25": 995.0,
+      "pm10": 985.0,
+      "instrument_status": [
+        0,
+        0,
+        0,
+        0,
+        9,
+        9
+      ]
+    },
+    {
+      "date": "2018-03-09 16:00:00",
+      "station": 104,
+      "pm25": 985.0,
+      "pm10": 61.0,
+      "instrument_status": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "date": "2018-04-12 06:00:00",
+      "station": 104,
+      "pm25": 985.0,
+      "pm10": 54.0,
+      "instrument_status": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ]
+    },
+    {
+      "date": "2018-04-12 07:00:00",
+      "station": 104,
+      "pm25": 985.0,
+      "pm10": 63.0,
+      "instrument_status": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ]
+    },
+    {
+      "date": "2018-04-12 08:00:00",
+      "station": 104,
+      "pm25": 985.0,
+      "pm10": 82.0,
+      "instrument_status": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ]
+    },
+    {
+      "date": "2018-04-12 09:00:00",
+      "station": 104,
+      "pm25": 985.0,
+      "pm10": 80.0,
+      "instrument_status": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ]
+    },
+    {
+      "date": "2018-04-12 10:00:00",
+      "station": 104,
+      "pm25": 985.0,
+      "pm10": 84.0,
+      "instrument_status": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ]
+    },
+    {
+      "date": "2018-04-12 11:00:00",
+      "station": 104,
+      "pm25": 985.0,
+      "pm10": 66.0,
+      "instrument_status": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ]
+    }
+  ],
+  "negative_sentinels_per_pollutant": {
+    "SO2": 3976,
+    "NO2": 3834,
+    "O3": 4059,
+    "CO": 4036,
+    "PM10": 3962,
+    "PM2.5": 3973
+  },
+  "rows_with_any_negative_sentinel": 4992,
+  "rows_after_status_filter": 605051,
+  "nan_pollutant_rows_after_cleaning": 0,
+  "negative_values_after_cleaning": 0,
+  "pm25_after_status_filter": {
+    "mean": 24.075,
+    "median": 19.0,
+    "std": 18.868,
+    "max": 204.0
+  },
+  "feature_rows": 604901,
+  "model_matrix_columns": 38,
+  "pm25_ugm3": {
+    "count": 604901.0,
+    "mean": 24.069,
+    "std": 18.865,
+    "min": 1.0,
+    "25%": 12.0,
+    "50%": 19.0,
+    "75%": 31.0,
+    "max": 204.0
+  },
+  "pm25_top5": [
+    204.0,
+    199.0,
+    195.0,
+    192.0,
+    188.0
+  ],
+  "grade_share_pct": {
+    "Good": 37.51,
+    "Normal": 43.66,
+    "Bad": 16.36,
+    "VeryBad": 2.46
+  },
+  "yearly_mean_pm25": {
+    "2017": 24.55,
+    "2018": 22.71,
+    "2019": 24.97
+  },
+  "verybad_share_by_hour_top5_pct": {
+    "21": 2.97,
+    "22": 2.88,
+    "10": 2.87,
+    "0": 2.81,
+    "20": 2.7
+  },
+  "train_window_mean_pm25": 25.33,
+  "holdout_window_mean_pm25": 19.04,
+  "verybad_share_by_month_top5_pct": {
+    "2019-03": 26.0,
+    "2019-01": 10.9,
+    "2018-03": 9.3,
+    "2017-12": 7.6,
+    "2018-01": 7.3
+  },
+  "verybad_share_by_month_2019_05_onwards": {
+    "2019-05": 2.4,
+    "2019-06": 0.2,
+    "2019-07": 0.2,
+    "2019-08": 0.0,
+    "2019-09": 0.0,
+    "2019-10": 0.0,
+    "2019-11": 0.0,
+    "2019-12": 2.4
+  },
+  "corr_roll6_vs_pm25_fixed": 0.9074,
+  "corr_roll6_vs_pm25_leaky": 0.9427,
+  "mean_abs_gap_roll6_vs_pm25_fixed": 5.188,
+  "mean_abs_gap_roll6_vs_pm25_leaky": 4.082,
+  "extra_rows_kept_by_leaky_variant": 25,
+  "standardised_columns": [
+    "SO2",
+    "NO2",
+    "O3",
+    "CO",
+    "PM10",
+    "Latitude",
+    "Longitude",
+    "Hour",
+    "DayOfWeek",
+    "Month",
+    "PM2.5_lag1",
+    "PM10_lag1",
+    "PM2.5_roll6"
+  ]
+}

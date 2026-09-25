@@ -1,0 +1,387 @@
+{
+  "protocol": "chronological",
+  "test_rows": 120995,
+  "baseline_persistence_t_minus_1": {
+    "accuracy": 0.8754,
+    "macro_f1": 0.8494,
+    "vb_recall": 0.8066,
+    "vb_precision": 0.8066,
+    "vb_fn": 141,
+    "vb_support": 729,
+    "alerts_issued": 729,
+    "confusion_matrix": [
+      [
+        51214,
+        5637,
+        18,
+        0
+      ],
+      [
+        5647,
+        44735,
+        1735,
+        1
+      ],
+      [
+        16,
+        1738,
+        9385,
+        140
+      ],
+      [
+        0,
+        0,
+        141,
+        588
+      ]
+    ]
+  },
+  "baseline_majority_class": {
+    "accuracy": 0.4307,
+    "macro_f1": 0.1505,
+    "vb_recall": 0.0,
+    "vb_precision": null,
+    "vb_fn": 729,
+    "vb_support": 729,
+    "alerts_issued": 0,
+    "confusion_matrix": [
+      [
+        0,
+        56869,
+        0,
+        0
+      ],
+      [
+        0,
+        52118,
+        0,
+        0
+      ],
+      [
+        0,
+        11279,
+        0,
+        0
+      ],
+      [
+        0,
+        729,
+        0,
+        0
+      ]
+    ],
+    "class_id": 1,
+    "class_name": "Normal"
+  },
+  "baseline_uniform_random": {
+    "accuracy": 0.2516,
+    "macro_f1": 0.1994,
+    "vb_recall": 0.2373,
+    "vb_precision": 0.0057,
+    "vb_fn": 556,
+    "vb_support": 729,
+    "alerts_issued": 30235,
+    "confusion_matrix": [
+      [
+        14267,
+        14187,
+        14175,
+        14240
+      ],
+      [
+        12977,
+        13050,
+        13074,
+        13017
+      ],
+      [
+        2761,
+        2762,
+        2951,
+        2805
+      ],
+      [
+        197,
+        168,
+        191,
+        173
+      ]
+    ]
+  },
+  "train_class_share_pct": {
+    "Good": 35.14,
+    "Normal": 43.81,
+    "Bad": 18.12,
+    "VeryBad": 2.92
+  },
+  "model_hist_gbdt": {
+    "accuracy": 0.9044,
+    "macro_f1": 0.8919,
+    "vb_recall": 0.8354,
+    "vb_precision": 0.9227,
+    "vb_fn": 120,
+    "vb_support": 729,
+    "alerts_issued": 660,
+    "confusion_matrix": [
+      [
+        52922,
+        3812,
+        135,
+        0
+      ],
+      [
+        5060,
+        46251,
+        807,
+        0
+      ],
+      [
+        1,
+        1580,
+        9647,
+        51
+      ],
+      [
+        0,
+        0,
+        120,
+        609
+      ]
+    ],
+    "fit_seconds": 9.8,
+    "per_class": {
+      "Good": {
+        "precision": 0.9127,
+        "recall": 0.9306,
+        "f1-score": 0.9216,
+        "support": 56869.0
+      },
+      "Normal": {
+        "precision": 0.8956,
+        "recall": 0.8874,
+        "f1-score": 0.8915,
+        "support": 52118.0
+      },
+      "Bad": {
+        "precision": 0.9008,
+        "recall": 0.8553,
+        "f1-score": 0.8775,
+        "support": 11279.0
+      },
+      "VeryBad": {
+        "precision": 0.9227,
+        "recall": 0.8354,
+        "f1-score": 0.8769,
+        "support": 729.0
+      },
+      "macro avg": {
+        "precision": 0.908,
+        "recall": 0.8772,
+        "f1-score": 0.8919,
+        "support": 120995.0
+      },
+      "weighted avg": {
+        "precision": 0.9043,
+        "recall": 0.9044,
+        "f1-score": 0.9042,
+        "support": 120995.0
+      }
+    }
+  },
+  "lift_over_persistence_accuracy": 0.029,
+  "lift_over_majority_accuracy": 0.4737,
+  "permutation_importance_accuracy_drop": {
+    "PM10": {
+      "mean": 0.29193,
+      "std": 0.00254
+    },
+    "PM2.5_lag1": {
+      "mean": 0.24794,
+      "std": 0.00176
+    },
+    "PM10_lag1": {
+      "mean": 0.09681,
+      "std": 0.00055
+    },
+    "PM2.5_roll6": {
+      "mean": 0.01257,
+      "std": 0.00073
+    },
+    "Month": {
+      "mean": 0.00326,
+      "std": 0.00038
+    },
+    "CO": {
+      "mean": 0.00294,
+      "std": 0.00086
+    },
+    "NO2": {
+      "mean": 0.00145,
+      "std": 0.0006
+    },
+    "O3": {
+      "mean": 0.00089,
+      "std": 0.00052
+    },
+    "Hour": {
+      "mean": 0.00088,
+      "std": 0.00019
+    },
+    "Longitude": {
+      "mean": 0.00081,
+      "std": 0.00017
+    },
+    "Dist_Yongsan-gu": {
+      "mean": 0.00064,
+      "std": 0.00012
+    },
+    "Latitude": {
+      "mean": 0.00061,
+      "std": 0.00046
+    },
+    "SO2": {
+      "mean": 0.00046,
+      "std": 0.0001
+    },
+    "Dist_Dongdaemun-gu": {
+      "mean": 0.00017,
+      "std": 4e-05
+    },
+    "Dist_Seongbuk-gu": {
+      "mean": 0.00016,
+      "std": 3e-05
+    },
+    "Dist_Dobong-gu": {
+      "mean": 0.00012,
+      "std": 6e-05
+    },
+    "Dist_Dongjak-gu": {
+      "mean": 0.00011,
+      "std": 8e-05
+    },
+    "Dist_Gwangjin-gu": {
+      "mean": 0.0001,
+      "std": 4e-05
+    },
+    "Dist_Songpa-gu": {
+      "mean": 9e-05,
+      "std": 9e-05
+    },
+    "Dist_Guro-gu": {
+      "mean": 7e-05,
+      "std": 2e-05
+    },
+    "Dist_Seodaemun-gu": {
+      "mean": 7e-05,
+      "std": 3e-05
+    },
+    "Dist_Gangdong-gu": {
+      "mean": 3e-05,
+      "std": 2e-05
+    },
+    "Dist_Seocho-gu": {
+      "mean": 3e-05,
+      "std": 7e-05
+    },
+    "Dist_Eunpyeong-gu": {
+      "mean": 2e-05,
+      "std": 8e-05
+    },
+    "Dist_Geumcheon-gu": {
+      "mean": 2e-05,
+      "std": 5e-05
+    },
+    "Dist_Gangseo-gu": {
+      "mean": 1e-05,
+      "std": 5e-05
+    },
+    "Dist_Gangbuk-gu": {
+      "mean": 1e-05,
+      "std": 2e-05
+    },
+    "Dist_Nowon-gu": {
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "Dist_Gangnam-gu": {
+      "mean": -1e-05,
+      "std": 4e-05
+    },
+    "DayOfWeek": {
+      "mean": -1e-05,
+      "std": 0.00019
+    },
+    "Dist_Yangcheon-gu": {
+      "mean": -4e-05,
+      "std": 2e-05
+    },
+    "Dist_Gwanak-gu": {
+      "mean": -4e-05,
+      "std": 7e-05
+    },
+    "Dist_Jung-gu": {
+      "mean": -8e-05,
+      "std": 5e-05
+    },
+    "Dist_Seongdong-gu": {
+      "mean": -8e-05,
+      "std": 8e-05
+    },
+    "Dist_Yeongdeungpo-gu": {
+      "mean": -9e-05,
+      "std": 0.0001
+    },
+    "Dist_Jungnang-gu": {
+      "mean": -9e-05,
+      "std": 7e-05
+    },
+    "Dist_Mapo-gu": {
+      "mean": -0.00019,
+      "std": 9e-05
+    },
+    "Dist_Jongno-gu": {
+      "mean": -0.00027,
+      "std": 3e-05
+    }
+  },
+  "rf_impurity_importance": {
+    "PM2.5_lag1": 0.31348,
+    "PM10": 0.18883,
+    "PM2.5_roll6": 0.18212,
+    "PM10_lag1": 0.11453,
+    "CO": 0.04235,
+    "NO2": 0.0302,
+    "O3": 0.02324,
+    "Month": 0.02045,
+    "Hour": 0.01759,
+    "SO2": 0.0159,
+    "DayOfWeek": 0.01148,
+    "Longitude": 0.00905,
+    "Latitude": 0.009,
+    "Dist_Seongdong-gu": 0.00112,
+    "Dist_Seocho-gu": 0.0011,
+    "Dist_Seongbuk-gu": 0.00107,
+    "Dist_Yeongdeungpo-gu": 0.00104,
+    "Dist_Yongsan-gu": 0.00102,
+    "Dist_Songpa-gu": 0.00099,
+    "Dist_Seodaemun-gu": 0.00099,
+    "Dist_Eunpyeong-gu": 0.00099,
+    "Dist_Dobong-gu": 0.00097,
+    "Dist_Guro-gu": 0.00095,
+    "Dist_Mapo-gu": 0.00095,
+    "Dist_Gwanak-gu": 0.0009,
+    "Dist_Gangnam-gu": 0.00089,
+    "Dist_Dongdaemun-gu": 0.00086,
+    "Dist_Gangdong-gu": 0.00082,
+    "Dist_Gwangjin-gu": 0.00079,
+    "Dist_Jungnang-gu": 0.00078,
+    "Dist_Yangcheon-gu": 0.00076,
+    "Dist_Gangseo-gu": 0.00073,
+    "Dist_Jongno-gu": 0.00073,
+    "Dist_Gangbuk-gu": 0.00072,
+    "Dist_Dongjak-gu": 0.0007,
+    "Dist_Jung-gu": 0.00069,
+    "Dist_Nowon-gu": 0.00062,
+    "Dist_Geumcheon-gu": 0.00061
+  }
+}
