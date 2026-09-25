@@ -2,6 +2,8 @@
 
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![sklearn](https://img.shields.io/badge/sklearn-1.2-orange)
+![CI](https://github.com/Ljonjon/seoul-air-quality-ml/actions/workflows/ci.yml/badge.svg)
+[![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 An end-to-end machine learning study on hourly air-quality measurements from
 25 monitoring stations in Seoul (2017-2019, ~650k rows): unsupervised mining of
@@ -106,6 +108,33 @@ in `figures/`. Individual stages: `python data_preprocessing.py`,
 `python task_clustering.py`, `python task_classification.py`.
 `render_cm.py` re-draws confusion heatmaps from the JSON without retraining.
 
+### Tests / CI
+
+`bash
+pytest -q          # 10 tests, ~5 s, no dataset required
+`
+
+`tests/test_pipeline.py` builds a small synthetic clone of the three source CSVs
+(deterministic diurnal pollutant cycle, abnormal-status hours, one `-1` sensor
+sentinel) and asserts the leakage / ordering / split / scaling invariants above, so
+the methodological fixes cannot silently regress. The raw dataset is not
+redistributed here; regenerate `figures/` and `results/` locally with
+`python main.py`.
+
+## Repository layout
+
+`
+main.py                     entry point: python main.py [--data PATH] [--k K]
+data_preprocessing.py       cleaning, [FIX-1..5] features, both split protocols, scaling
+task_clustering.py          elbow study, K-Means, PCA projection, cluster profiles
+task_classification.py      DT / RF / HistGB, metrics, figures, results JSON
+render_cm.py                re-draw confusion heatmaps from results JSON (no retraining)
+tests/test_pipeline.py      synthetic-data regression tests (CI; no dataset needed)
+figures/                    elbow, PCA, accuracy bars, 6 confusion matrices (generated)
+results/                    classification_results.json, cluster_profiles.csv, run_log.txt
+requirements.txt            minimal pinned dependencies
+`
+
 ## Corrections from the graded course version
 
 The submitted course version reported 88.54% accuracy under a random split.
@@ -123,10 +152,21 @@ all numbers above are from the corrected pipeline:
    a non-normal status (6.6% of the data) are now actually dropped.
 4. **Warm-up ordering** - lag/rolling features are now computed after an
    explicit sort by (station, timestamp).
+5. **No safety net** - the fixes are pinned by `tests/test_pipeline.py`, a
+   synthetic fixture (no dataset download required) that regenerates the three
+   source CSVs and asserts: the status filter drops exactly the flagged hours;
+   the rolling window excludes the label hour; an *intervention test* where
+   PM2.5 at hour t is changed leaves hour t's own features untouched and shifts
+   precisely the six following rows; lag/rolling never cross stations; the
+   chronological split never trains on the future; scalers are train-fit only.
+   GitHub Actions runs it on Python 3.10-3.12 for every push.
 
 ## Limitations
 
 - Single-cut validation; a rolling-origin evaluation would be stronger.
+- The model *nowcasts* the current hour's grade from that hour's co-pollutants plus
+  PM2.5 history; a true 1-hour-ahead forecast would additionally have to shift the
+  current-hour covariates (see the prediction-horizon discussion in the write-up).
 - No meteorological covariates (wind, temperature) - the biggest known driver
   of dispersion; see the report's future-work section.
 - K-Means assumes convex clusters; the long-tail regimes suggest GMM or
@@ -140,3 +180,9 @@ Two-person course team: one member contributed the visualization scheme, model
 pipeline and report; the other the experimental analysis and framework.
 Personal student IDs and the graded report PDF are intentionally not published
 here.
+
+## License
+
+MIT - see [LICENSE](LICENSE). Code, figures and derived metrics are mine; the
+underlying *Seoul Air Quality* measurements belong to the public dataset authors
+and are not redistributed in this repository.
