@@ -1,0 +1,196 @@
+{
+  "cluster_features": [
+    "SO2",
+    "NO2",
+    "O3",
+    "CO",
+    "PM10"
+  ],
+  "note": "PM2.5 is excluded from the clustering features and only used here for validation",
+  "internal_metrics_on_20k_sample": [
+    {
+      "k": 2,
+      "inertia": 67202.6,
+      "silhouette": 0.3367,
+      "calinski_harabasz": 9818.4,
+      "davies_bouldin": 1.2548,
+      "min_cluster_share_pct": 32.59
+    },
+    {
+      "k": 3,
+      "inertia": 56640.6,
+      "silhouette": 0.2673,
+      "calinski_harabasz": 7688.9,
+      "davies_bouldin": 1.382,
+      "min_cluster_share_pct": 20.08
+    },
+    {
+      "k": 4,
+      "inertia": 48515.6,
+      "silhouette": 0.2415,
+      "calinski_harabasz": 7100.3,
+      "davies_bouldin": 1.3396,
+      "min_cluster_share_pct": 12.02
+    },
+    {
+      "k": 5,
+      "inertia": 43967.6,
+      "silhouette": 0.2328,
+      "calinski_harabasz": 6392.8,
+      "davies_bouldin": 1.3048,
+      "min_cluster_share_pct": 11.02
+    },
+    {
+      "k": 6,
+      "inertia": 40403.7,
+      "silhouette": 0.2295,
+      "calinski_harabasz": 5917.8,
+      "davies_bouldin": 1.2734,
+      "min_cluster_share_pct": 4.88
+    }
+  ],
+  "train_half": {
+    "rows": 483906,
+    "clusters": {
+      "0": {
+        "hours": 95060,
+        "share_pct": 19.64,
+        "pollutant_z": {
+          "SO2": 0.466,
+          "NO2": -0.438,
+          "O3": 1.333,
+          "CO": -0.24,
+          "PM10": 0.559
+        },
+        "pm25_mean": 31.46,
+        "pm25_median": 28.0,
+        "pm25_p90": 53.0,
+        "grade_share_pct": {
+          "Good": 14.05,
+          "Normal": 53.43,
+          "Bad": 30.26,
+          "VeryBad": 2.26
+        },
+        "verybad_rate_pct": 2.259,
+        "winter_share_pct": 13.7,
+        "summer_share_pct": 31.6
+      },
+      "1": {
+        "hours": 134178,
+        "share_pct": 27.73,
+        "pollutant_z": {
+          "SO2": 0.54,
+          "NO2": 1.222,
+          "O3": -0.81,
+          "CO": 1.121,
+          "PM10": 0.666
+        },
+        "pm25_mean": 40.73,
+        "pm25_median": 34.0,
+        "pm25_p90": 73.0,
+        "grade_share_pct": {
+          "Good": 4.97,
+          "Normal": 48.18,
+          "Bad": 37.9,
+          "VeryBad": 8.94
+        },
+        "verybad_rate_pct": 8.941,
+        "winter_share_pct": 50.5,
+        "summer_share_pct": 5.6
+      },
+      "2": {
+        "hours": 254668,
+        "share_pct": 52.63,
+        "pollutant_z": {
+          "SO2": -0.458,
+          "NO2": -0.48,
+          "O3": -0.071,
+          "CO": -0.501,
+          "PM10": -0.559
+        },
+        "pm25_mean": 14.92,
+        "pm25_median": 14.0,
+        "pm25_p90": 27.0,
+        "grade_share_pct": {
+          "Good": 58.91,
+          "Normal": 37.92,
+          "Bad": 3.17,
+          "VeryBad": 0.0
+        },
+        "verybad_rate_pct": 0.004,
+        "winter_share_pct": 21.5,
+        "summer_share_pct": 39.8
+      }
+    }
+  },
+  "holdout_2019_summer": {
+    "rows": 120995,
+    "clusters": {
+      "0": {
+        "hours": 16775,
+        "share_pct": 13.86,
+        "pollutant_z": {
+          "SO2": 0.008,
+          "NO2": -0.572,
+          "O3": 1.784,
+          "CO": -0.282,
+          "PM10": 0.162
+        },
+        "pm25_mean": 28.66,
+        "pm25_median": 25.0,
+        "pm25_p90": 49.0,
+        "grade_share_pct": {
+          "Good": 14.77,
+          "Normal": 61.52,
+          "Bad": 21.94,
+          "VeryBad": 1.76
+        },
+        "verybad_rate_pct": 1.765
+      },
+      "1": {
+        "hours": 18277,
+        "share_pct": 15.11,
+        "pollutant_z": {
+          "SO2": -0.226,
+          "NO2": 1.073,
+          "O3": -0.918,
+          "CO": 1.124,
+          "PM10": 0.255
+        },
+        "pm25_mean": 32.1,
+        "pm25_median": 28.0,
+        "pm25_p90": 53.0,
+        "grade_share_pct": {
+          "Good": 8.78,
+          "Normal": 59.24,
+          "Bad": 29.62,
+          "VeryBad": 2.36
+        },
+        "verybad_rate_pct": 2.364
+      },
+      "2": {
+        "hours": 85943,
+        "share_pct": 71.03,
+        "pollutant_z": {
+          "SO2": -0.756,
+          "NO2": -0.55,
+          "O3": -0.069,
+          "CO": -0.486,
+          "PM10": -0.667
+        },
+        "pm25_mean": 14.38,
+        "pm25_median": 13.0,
+        "pm25_p90": 26.0,
+        "grade_share_pct": {
+          "Good": 61.42,
+          "Normal": 36.04,
+          "Bad": 2.54,
+          "VeryBad": 0.0
+        },
+        "verybad_rate_pct": 0.001
+      }
+    }
+  },
+  "holdout_verybad_rate_overall_pct": 0.603,
+  "train_verybad_rate_overall_pct": 2.925
+}

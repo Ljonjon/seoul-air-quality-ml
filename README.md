@@ -87,6 +87,33 @@ than spatial. Contrast with impurity importance, where `PM2.5_roll6` ranks third
 out-of-sample information - a good illustration of why permutation importance is
 the one to trust.
 
+### From a score to a decision: working points and calibration
+
+`predict()` is argmax over four grades, which silently fixes the alert threshold.
+`analysis/alert_threshold.py` exposes it instead (HistGB, chronological holdout,
+729 real VeryBad hours, ~7.25 months):
+
+| Rule (alert if P(VeryBad) >= tau) | Alerts | Per month | VeryBad recall | Precision | Missed |
+|---|---|---|---|---|---|
+| argmax (what `predict()` does) | 660 | 91 | 0.835 | 0.923 | 120 |
+| tau = 0.25 | 766 | 106 | 0.912 | 0.868 | 64 |
+| tau = 0.15 | 846 | 117 | 0.944 | 0.813 | 41 |
+| tau = 0.10 | 916 | 126 | 0.956 | 0.761 | 32 |
+| tau = 0.05 | 1,053 | 145 | 0.973 | 0.673 | 20 |
+
+argmax is *not* the best working point: tau = 0.25 already finds 7.7 pt more of the
+rarest class for ~15 extra alerts a month. Each further step has a price - going from
+tau 0.25 to 0.15 buys 23 fewer missed hours at the cost of 57 more false ones, so it
+only pays if a missed episode is worth at least 2.5x a false alert; 0.15 -> 0.10 needs
+6.8x; 0.10 -> 0.05 needs 10.4x. That table is the answer to "how would you operate it".
+
+The raw probabilities turn out to be usable as they are: Brier 0.00101 (vs 0.00599 for
+a base-rate predictor) and 10-bin ECE 0.00032. Adding isotonic calibration fitted on
+the training block made both *worse* (Brier 0.00105, ECE 0.00086) because it maps onto
+a 2.9% training-period base rate while the holdout sits at 0.6% - a clean
+demonstration that calibration is not free and has to be fitted on a window that
+resembles the deployment period.
+
 ### Clustering: three chemical signatures
 
 K-Means on the five standardized pollutants **excluding PM2.5** (kept out so the
@@ -158,6 +185,8 @@ python analysis/data_audit.py             # -> results/data_audit.json          
 python analysis/baselines_importance.py   # -> results/baselines_importance.json (~30 s)
 python analysis/pca_variance_check.py     # -> results/pca_variance.json         (~12 s)
 python analysis/leak_ablation.py          # -> results/leak_ablation.json        (~6 min)
+python analysis/cluster_validity.py       # -> results/cluster_validity.json       (~1 min)
+python analysis/alert_threshold.py        # -> results/alert_threshold.json        (~40 s)
 ```
 
 `main.py` produces the models; these four scripts produce everything else quoted
@@ -180,6 +209,12 @@ pipeline, and they dump JSON so the numbers can be diffed instead of remembered.
   of six pollutants (PC1 = 82.2%) and shows the pipeline's own standardized five
   pollutants at 50.0 / 23.3 / 13.6.
 - **leak_ablation** - the 6-cell study below.
+- **cluster_validity** - silhouette / Calinski-Harabasz / Davies-Bouldin for
+  K = 2..6, plus the reason K = 3 was chosen: PM2.5 is *not* a clustering feature, yet
+  the clusters separate it 40.7 / 31.5 / 14.9 ug/m3 and its VeryBad rate
+  8.94% / 2.26% / 0.004% against a 2.93% base rate - and the ordering survives on the
+  2019 holdout even though the base rate there drops to 0.60%.
+- **alert_threshold** - the threshold and calibration tables above.
 
 
 ## Repository layout
@@ -271,10 +306,13 @@ to be reported next to every number.
   current-hour covariates (see the prediction-horizon discussion in the write-up).
 - No meteorological covariates (wind, temperature) - the biggest known driver
   of dispersion; see the report's future-work section.
-- K-Means assumes convex clusters; the long-tail regimes suggest GMM or
-  HDBSCAN as follow-ups.
-- Class-3 thresholds are fixed banding; cost-sensitive tuning of the decision
-  threshold (precision/recall trade-off) is left to future work.
+- K-Means assumes convex clusters; the long-tail regimes suggest GMM or HDBSCAN as
+  follow-ups, and the internal indices (silhouette/CH/DB) actually prefer K = 2, which is
+  reported rather than hidden - K = 3 was kept for interpretability (see Clustering).
+- Thresholds: `analysis/alert_threshold.py` quantifies the precision/recall frontier
+  and shows argmax is not the best working point, but tau is still chosen by hand from
+  that table; picking it with rolling-origin CV under an explicit alert budget is the
+  next step.
 
 ## Team
 
