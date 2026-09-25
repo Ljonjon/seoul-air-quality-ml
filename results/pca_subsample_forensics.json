@@ -1,0 +1,102 @@
+{
+  "columns": [
+    "SO2",
+    "NO2",
+    "O3",
+    "CO",
+    "PM10"
+  ],
+  "sample_size": 20000,
+  "seed": 42,
+  "graded_matrix": {
+    "rows": 513915,
+    "pca_on_full_train_block_pct": [
+      46.46,
+      23.24,
+      17.64
+    ],
+    "pca_on_20k_sample_pct": [
+      52.96,
+      29.33,
+      11.82
+    ],
+    "note": "the graded elbow sample is also the input to its PCA"
+  },
+  "graded_sample_size_study": [
+    {
+      "n": 2000,
+      "reps": 12,
+      "pc1_pc2_pct_mean": 85.34,
+      "pc1_pc2_pct_min": 65.3,
+      "pc1_pc2_pct_max": 92.83,
+      "extreme_rows_pct_mean": 0.529
+    },
+    {
+      "n": 5000,
+      "reps": 12,
+      "pc1_pc2_pct_mean": 89.23,
+      "pc1_pc2_pct_min": 79.53,
+      "pc1_pc2_pct_max": 99.26,
+      "extreme_rows_pct_mean": 0.51
+    },
+    {
+      "n": 20000,
+      "reps": 12,
+      "pc1_pc2_pct_mean": 89.04,
+      "pc1_pc2_pct_min": 82.34,
+      "pc1_pc2_pct_max": 97.66,
+      "extreme_rows_pct_mean": 0.51
+    },
+    {
+      "n": 50000,
+      "reps": 12,
+      "pc1_pc2_pct_mean": 86.99,
+      "pc1_pc2_pct_min": 82.73,
+      "pc1_pc2_pct_max": 88.95,
+      "extreme_rows_pct_mean": 0.493
+    },
+    {
+      "n": 100000,
+      "reps": 12,
+      "pc1_pc2_pct_mean": 86.69,
+      "pc1_pc2_pct_min": 84.96,
+      "pc1_pc2_pct_max": 88.12,
+      "extreme_rows_pct_mean": 0.5
+    },
+    {
+      "n": 200000,
+      "reps": 12,
+      "pc1_pc2_pct_mean": 77.51,
+      "pc1_pc2_pct_min": 67.15,
+      "pc1_pc2_pct_max": 87.14,
+      "extreme_rows_pct_mean": 0.5
+    },
+    {
+      "n": 513915,
+      "reps": 1,
+      "pc1_pc2_pct_mean": 69.7,
+      "pc1_pc2_pct_min": 69.7,
+      "pc1_pc2_pct_max": 69.7,
+      "extreme_rows_pct_mean": 0.5
+    }
+  ],
+  "filtered_matrix": {
+    "rows": 483920,
+    "pca_on_full_train_block_pct": [
+      49.8,
+      23.53,
+      13.37
+    ],
+    "pca_on_20k_sample_pct": [
+      49.02,
+      23.75,
+      13.69
+    ]
+  },
+  "tail_leverage": {
+    "p99_5_pct_l2_norm": 3.4,
+    "max_l2_norm_full": 747.7,
+    "max_l2_norm_inside_20k_draw": 51.5,
+    "variance_share_rows_above_p99_5_pct": 84.84
+  }
+}

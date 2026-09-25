@@ -1,0 +1,165 @@
+{
+  "what": "Evidence that the \"course version\" numbers quoted in the README are the graded submission itself, not this repo with a flag flipped.",
+  "method": "The graded submission's own data_preprocessing.py and task_classification.py were imported unmodified from the original submission folder and run unmodified against the same Kaggle dataset, then scored with this repo's metric code. No code in this repository is required or changed by the replay.",
+  "caveat": "The graded code is a team submission and is not redistributed here, so this JSON is evidence, not something re-runnable from this repository. Everything else in results/ is regenerable with the scripts in analysis/.",
+  "protocol": {
+    "status_filter_applied": false,
+    "roll6_includes_label_hour": true,
+    "split": "random stratified 80/20, random_state=42",
+    "scaler": "StandardScaler on 13 numeric columns, fit on train",
+    "rows": {
+      "train": 513915,
+      "test": 128479
+    },
+    "classes": [
+      "Good",
+      "Normal",
+      "Bad",
+      "VeryBad"
+    ],
+    "support_verybad": 3414
+  },
+  "graded_claims_vs_replay": {
+    "DecisionTree": {
+      "graded": "86.68% accuracy",
+      "replay": {
+        "accuracy": 0.8668,
+        "macro_f1": 0.8565,
+        "verybad_recall": 0.8029,
+        "verybad_precision": 0.8633,
+        "verybad_tp": 2741,
+        "verybad_fn": 673,
+        "verybad_alerts": 3175
+      },
+      "match": true
+    },
+    "RandomForest": {
+      "graded": "88.09% accuracy, 689 missed VeryBad",
+      "replay": {
+        "accuracy": 0.8809,
+        "macro_f1": 0.8708,
+        "verybad_recall": 0.7982,
+        "verybad_precision": 0.9065,
+        "verybad_tp": 2725,
+        "verybad_fn": 689,
+        "verybad_alerts": 3006
+      },
+      "match": true
+    },
+    "HistGradientBoosting": {
+      "graded": "88.54% accuracy, VeryBad recall 0.84, 2869 detected, 545 missed",
+      "replay": {
+        "accuracy": 0.8854,
+        "macro_f1": 0.8767,
+        "verybad_recall": 0.8404,
+        "verybad_precision": 0.871,
+        "verybad_tp": 2869,
+        "verybad_fn": 545,
+        "verybad_alerts": 3294
+      },
+      "match": true
+    }
+  },
+  "reading_the_confusion_matrices": {
+    "note": "rows = true grade, columns = predicted grade, order Good,Normal,Bad,VeryBad",
+    "alert_volume_vs_test_hours": {
+      "test_hours": 128479,
+      "HistGradientBoosting": 3294,
+      "RandomForest": 3006,
+      "DecisionTree": 3175
+    },
+    "verybad_alert_rate_pct_HistGB": 2.56,
+    "cross_grade_errors_HistGB": {
+      "true_Good_predicted_VeryBad": 47,
+      "true_VeryBad_predicted_Good": 50
+    },
+    "comparison_this_repo_HistGB": {
+      "accuracy": 0.9044,
+      "verybad_recall": 0.8354,
+      "verybad_precision": 0.9227,
+      "verybad_alerts": 660,
+      "missed": 120,
+      "support": 729
+    }
+  },
+  "confusion_matrices": {
+    "DecisionTree": [
+      [
+        42820,
+        5780,
+        20,
+        26
+      ],
+      [
+        4865,
+        48156,
+        2408,
+        27
+      ],
+      [
+        35,
+        2897,
+        17650,
+        381
+      ],
+      [
+        54,
+        69,
+        550,
+        2741
+      ]
+    ],
+    "RandomForest": [
+      [
+        43589,
+        5041,
+        12,
+        4
+      ],
+      [
+        4346,
+        49135,
+        1971,
+        4
+      ],
+      [
+        23,
+        2943,
+        17724,
+        273
+      ],
+      [
+        71,
+        89,
+        529,
+        2725
+      ]
+    ],
+    "HistGradientBoosting": [
+      [
+        43759,
+        4829,
+        11,
+        47
+      ],
+      [
+        4328,
+        48998,
+        2093,
+        37
+      ],
+      [
+        23,
+        2467,
+        18132,
+        341
+      ],
+      [
+        50,
+        62,
+        433,
+        2869
+      ]
+    ]
+  }
+}

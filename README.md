@@ -187,9 +187,10 @@ python analysis/pca_variance_check.py     # -> results/pca_variance.json        
 python analysis/leak_ablation.py          # -> results/leak_ablation.json        (~6 min)
 python analysis/cluster_validity.py       # -> results/cluster_validity.json       (~1 min)
 python analysis/alert_threshold.py        # -> results/alert_threshold.json        (~40 s)
+python analysis/pca_subsample_forensics.py # -> results/pca_subsample_forensics.json (~15 s)
 ```
 
-`main.py` produces the models; these four scripts produce everything else quoted
+`main.py` produces the models; these seven scripts produce everything else quoted
 above. They share `analysis/_common.py` (path resolution, the leaky-vs-fixed feature
 builders, both split protocols) so an ablation is a flag flip, not a copy of the
 pipeline, and they dump JSON so the numbers can be diffed instead of remembered.
@@ -205,9 +206,23 @@ pipeline, and they dump JSON so the numbers can be diffed instead of remembered.
   persistence accuracy as 0.47 by binning the *standardized* lag column with the raw
   15/35/75 thresholds; the audited value is 0.8754 (see Corrections).
 - **pca_variance_check** - explained variance across 10 scaler x column-set x
-  row-set combinations, which reproduces the course report's "82%" as MinMax scaling
-  of six pollutants (PC1 = 82.2%) and shows the pipeline's own standardized five
-  pollutants at 50.0 / 23.3 / 13.6.
+  row-set combinations, so that every published ratio is tied to the preprocessing
+  that produced it: the standardized five pollutants this pipeline clusters give
+  50.0 / 23.3 / 13.6, Min-Max scaling of six pollutants gives PC1 alone 82.2 (an
+  arithmetic coincidence, not the course report's path - see the next bullet), and
+  unstandardized six pollutants are degenerate (PM10 loads 0.978 on PC1).
+- **pca_subsample_forensics** - where the course report's "PC1 53.0% + PC2 29.3% =
+  over 82%" really comes from. Its clustering code fits PCA on the same 20,000-row
+  elbow sample it uses for the K study, not on the training block. Reproduced to the
+  digit: that draw gives 52.96 / 29.33 (82.3%), while the full 513,915-row train
+  block on the same five standardized columns gives 46.5 / 23.2 (69.7%). The
+  mechanism is tail leverage, not information: the 0.5% of hours above the 99.5th
+  percentile of the standardized L2 norm own **84.8% of total variance** (max norm
+  747.7 against 51.5 inside the draw), and across 12 draws mean PC1+PC2 is 89.0%
+  (82.3-97.7) at n = 20,000 versus 69.7% at full size. On this repo's filtered,
+  leakage-free matrix the gap nearly closes (49.8 / 23.5 full vs 49.0 / 23.8 on a
+  20k draw), because the status filter removes the broken-sensor extremes that made
+  the estimate unstable.
 - **leak_ablation** - the 6-cell study below.
 - **cluster_validity** - silhouette / Calinski-Harabasz / Davies-Bouldin for
   K = 2..6, plus the reason K = 3 was chosen: PM2.5 is *not* a clustering feature, yet
@@ -215,7 +230,6 @@ pipeline, and they dump JSON so the numbers can be diffed instead of remembered.
   8.94% / 2.26% / 0.004% against a 2.93% base rate - and the ordering survives on the
   2019 holdout even though the base rate there drops to 0.60%.
 - **alert_threshold** - the threshold and calibration tables above.
-
 
 ## Repository layout
 
@@ -227,9 +241,11 @@ task_classification.py      DT / RF / HistGB, metrics, figures, results JSON
 render_cm.py                re-draw confusion heatmaps from results JSON (no retraining)
 tests/test_pipeline.py      synthetic-data regression tests (CI; no dataset needed)
 analysis/_common.py           shared loaders: leaky vs fixed features, both splits
-analysis/*.py                 data audit, baselines+importance, PCA forensics, ablation
+analysis/*.py                 7 scripts: data audit, baselines + permutation
+                              importance, 2 PCA forensics studies, leak ablation,
+                              cluster validity, alert threshold / calibration
 figures/                    elbow, PCA, accuracy bars, 6 confusion matrices (generated)
-results/                    metrics + audit JSONs, cluster_profiles.csv, run_log.txt
+results/                    metrics + audit + replay JSONs, cluster_profiles.csv, run_log.txt
 requirements.txt            minimal pinned dependencies
 ```
 
@@ -267,10 +283,39 @@ are worth stating out loud:
   from `pd.cut()`-ing the *standardized* `PM2.5_lag1` column with the raw 15/35/75
   thresholds, so it degenerated into "always Good". The audited value is **0.8754**,
   which makes the result harder to earn and the claim honest (see Baselines above).
-- The course report's "PCA explains 82%" is reproducible only as *Min-Max* scaling of
-  six pollutants (PC1 alone = 82.2%); with the standardized five-pollutant input the
-  clustering actually uses, PC1/PC2/PC3 = 50.0/23.3/13.6%. An explained-variance
-  number without its preprocessing is not a number.
+- The course report's "PCA explains 82%" was neither a scaler nor a column choice:
+  its clustering code fits PCA on the 20,000-row elbow *sample* instead of on the
+  training block. `analysis/pca_subsample_forensics.py` reproduces 52.96 / 29.33 from
+  that draw and 46.5 / 23.2 / 17.6 from the full 513,915-row block (69.7% for two
+  components); the gap is tail leverage - 0.5% of hours own 84.8% of the variance, and
+  what a 20k draw misses is their magnitude, not their frequency (the extreme share
+  stays near 0.5% at every sample size). The 2-D projection remains a fair picture to
+  look at; the ratio is not a fair claim about information retention. An
+  explained-variance number without its sample size and preprocessing is not a number.
+
+### The graded numbers, reproduced from the graded code
+
+Cell E below is this repo's pipeline with the course protocol switched back on, which
+leaves one fair question: is cell E really what was submitted? It is. The graded
+submission's own modules were imported unmodified, run against the same dataset, and
+scored with this repo's metric code; every headline figure reproduces to the last
+quoted digit (`results/course_submission_replay.json` - that JSON is *evidence*, not
+re-runnable from this repository, because the team's original code is not
+redistributed):
+
+| Model | Claim in the graded report | Replay of the graded code | Match |
+|---|---|---|---|
+| Decision Tree | 86.68% accuracy | 0.8668, macro-F1 0.8565, 673 missed VeryBad | yes |
+| Random Forest | 88.09% accuracy, 689 missed VeryBad | 0.8809, macro-F1 0.8708, 689 missed | yes |
+| HistGradientBoosting | 88.54%, VeryBad recall 0.84, 2,869 detected, 545 missed | 0.8854, macro-F1 0.8767, recall 0.8404, TP 2,869, FN 545 of 3,414 | yes |
+
+Reading the graded confusion matrix rather than its summary line is what convinced me
+the rewrite was worth doing: there HistGB predicts VeryBad for 47 hours that were
+actually Good, and Good for 50 hours that were actually VeryBad. In this repo both of
+those cells are zero - the corrected model never confuses the two extreme grades - and
+alert precision on the rare class rises from 0.871 to 0.923 (3,294 alerts for 3,414
+true VeryBad hours there, 660 for 729 here; the two test windows differ, so recall is
+only comparable inside its own protocol).
 
 ### What each fix is worth
 
@@ -297,7 +342,6 @@ leaving 729 instead of 2,976 VeryBad hours in test, because the summer holdout i
 the cleanest part of the year - which is precisely why the evaluation protocol has
 to be reported next to every number.
 
-
 ## Limitations
 
 - Single-cut validation; a rolling-origin evaluation would be stronger.
@@ -313,11 +357,22 @@ to be reported next to every number.
   and shows argmax is not the best working point, but tau is still chosen by hand from
   that table; picking it with rolling-origin CV under an explicit alert budget is the
   next step.
+- Cross-protocol numbers are not interchangeable. The graded random split has a 2.66%
+  VeryBad base rate, the chronological holdout 0.60%; alert counts, precision and recall
+  are only meaningful inside one protocol, which is why every table in this README
+  names its split.
+- Explained-variance ratios on a heavy-tailed matrix depend on the sample they are
+  fitted on (see the PCA correction above), so this repository quotes the PCA figure as
+  a visualization and reports the full-block ratio, not the flattering one.
+
 
 ## Team
 
 Two-person course team: one member contributed the visualization scheme, model
 pipeline and report; the other the experimental analysis and framework.
+The revision published here - the leakage and split fixes, the regression tests, the
+CI workflow and every analysis script and number quoted above is my own solo work on
+top of that submission.
 Personal student IDs and the graded report PDF are intentionally not published
 here.
 
